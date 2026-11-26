@@ -1,4 +1,8 @@
-const API = `${location.protocol}//${location.hostname}:8089/people`;
+// Base del API. Por defecto usa el mismo origen (nginx en EC2 enruta
+// /pmng-api/ -> backend:8080). Si necesitas otro destino, define
+// window.PMNG_API_BASE antes de cargar este script.
+const API_BASE = window.PMNG_API_BASE || `${location.origin}/pmng-api`;
+const API = `${API_BASE}/people`;
 
 const input = document.getElementById('inputName');
 const btn = document.getElementById('btnSend');
