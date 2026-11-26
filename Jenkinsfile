@@ -5,7 +5,12 @@ pipeline {
     environment {
         COMPOSE_PROJECT_NAME = 'pmng'
         COMPOSE_FILE = 'docker-compose.yml'
-        ENV_FILE = credentials('pmng-env')
+        ENV_SERVER_PORT = '8080'
+        ENV_DB_HOST = 'pmng-mysql'
+        ENV_DB_PORT = '3306'
+        ENV_DB_NAME = 'people-dev'
+        ENV_DB_USER = 'root'
+        ENV_DB_PASS = 'root'
     }
 
 
@@ -14,7 +19,7 @@ pipeline {
             steps{
                 echo 'Deteniendo contenedores..'
                 sh '''
-                    docker compose -p ${COMPOSE_PROJECT_NAME} -f ${COMPOSE_FILE} --env-file ${ENV_FILE} down || true
+                    docker compose -p ${COMPOSE_PROJECT_NAME} -f ${COMPOSE_FILE} down || true
                 '''
             }
         }
@@ -24,7 +29,7 @@ pipeline {
             steps{
                 echo 'Eliminando imagenes antiguas..'
                 sh '''
-                    IMAGES=$(docker compose -p ${COMPOSE_PROJECT_NAME} -f ${COMPOSE_FILE} --env-file ${ENV_FILE} config --images | sort -u)
+                    IMAGES=$(docker compose -p ${COMPOSE_PROJECT_NAME} -f ${COMPOSE_FILE} config --images | sort -u)
 
 
                     for IMAGE in $IMAGES; do
@@ -40,7 +45,7 @@ pipeline {
             steps{
                 echo 'Generando nuevas imagenes...'
                 sh '''
-                    docker compose -p ${COMPOSE_PROJECT_NAME} -f ${COMPOSE_FILE} --env-file ${ENV_FILE} build --no-cache
+                    docker compose -p ${COMPOSE_PROJECT_NAME} -f ${COMPOSE_FILE} build --no-cache
                 '''
             }
         }
@@ -50,7 +55,7 @@ pipeline {
             steps{
                 echo 'Generando contenedores..'
                 sh '''
-                    docker compose -p ${COMPOSE_PROJECT_NAME} -f ${COMPOSE_FILE} --env-file ${ENV_FILE} up -d --force-recreate
+                    docker compose -p ${COMPOSE_PROJECT_NAME} -f ${COMPOSE_FILE} up -d --force-recreate
                 '''
             }
         }
