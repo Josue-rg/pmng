@@ -19,7 +19,8 @@ pipeline {
             steps{
                 echo 'Deteniendo contenedores..'
                 sh '''
-                    docker compose -p ${COMPOSE_PROJECT_NAME} -f ${COMPOSE_FILE} down || true
+                    docker compose -p ${COMPOSE_PROJECT_NAME} -f ${COMPOSE_FILE} down --remove-orphans || true
+                    docker rm -f pmng-servicios pmng-cliente || true
                 '''
             }
         }
