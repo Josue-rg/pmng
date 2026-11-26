@@ -6,7 +6,7 @@ pipeline {
         COMPOSE_PROJECT_NAME = 'pmng'
         COMPOSE_FILE = 'docker-compose.yml'
         ENV_SERVER_PORT = '8080'
-        ENV_DB_HOST = 'pmng-mysql'
+        ENV_DB_HOST = 'host.docker.internal'
         ENV_DB_PORT = '3306'
         ENV_DB_NAME = 'people-dev'
         ENV_DB_USER = 'root'
